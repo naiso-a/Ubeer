@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import Brewery from './Brewery/Brewery.jsx'; // Importer le composant Brewery
 import '../App.css'; // Assurez-vous que le fichier CSS est lié correctement
+import image from '../assets/images.jpg';
+import Button from '@mui/material/Button';
+
 
 const Home = () => {
   // Données simulées des bières
@@ -66,6 +69,10 @@ const Home = () => {
       <header className="home-header">
         <h1>Bienvenue sur Ubeer - Livraison de bière à domicile</h1>
         <p>Découvrez notre catalogue de bières, regroupées par brasserie, et ajoutez vos bières préférées au panier !</p>
+        <img src={image} alt="Description de l'image" />
+        <Button variant="contained" size="large" color="success">
+          Voir toutes les bières
+        </Button>
       </header>
 
       {/* Liste des bières groupées par brasserie */}
