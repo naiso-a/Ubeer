@@ -66,8 +66,6 @@ const Home = () => {
     <div className="home-container">
       <header className="home-header">
         <h1>Bienvenue sur Ubeer - Livraison de bière à domicile</h1>
-        <h1>Je suis un connard</h1>
-        <h1>je ne suis pas un connard</h1>
         <p>Découvrez notre catalogue de bières, regroupées par brasserie, et ajoutez vos bières préférées au panier !</p>
       </header>
 
