@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Brewery from './Brewery/Brewery.jsx'; // Importer le composant Brewery
 import '../App.css'; // Assurez-vous que le fichier CSS est lié correctement
 
+
 const Home = () => {
   // Données simulées des bières
   const beers = [
