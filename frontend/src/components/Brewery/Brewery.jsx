@@ -1,25 +1,57 @@
-// Brewery.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Brewery.css'
+import React, { useEffect, useState } from 'react';
 
-const Brewery = ({ breweryName, beers, addToCart }) => {
+const Brewery = () => {
+  const [brasseries, setBrasseries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBrasseries = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/brasseries');
+        
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des brasseries');
+        }
+
+        const data = await response.json();
+
+        console.log("Données des brasseries :", data);  // Vérifiez ici les données retournées
+
+        setBrasseries(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBrasseries();
+  }, []);  
+
+  if (loading) {
+    return <div>Chargement...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
-    <div className="brewery-section">
-      <h2>{breweryName}</h2>
-      <div className="beer-list">
-        {beers.map((beer) => (
-          <div key={beer._id} className="beer-item">
-            <img src={beer.image} alt={beer.name} className="beer-image" />
-            <h3>{beer.name}</h3>
-            <p>{beer.description}</p>
-            <p>Prix : {beer.price}€</p>
-            <button onClick={() => addToCart(beer)} className="add-to-cart-button">
-              Ajouter au panier
-            </button>
-            <h1>test</h1>
-          </div>
-        ))}
+    <div>
+      <h1>Liste des Brasseries</h1>
+      <div className="brewery-list">
+        {brasseries.length === 0 ? (
+          <p>Aucune brasserie disponible.</p>
+        ) : (
+          brasseries.map((brasserie) => (
+            <div key={brasserie.id} className="brewery-card">
+              <img src={brasserie.image_url} alt={brasserie.name} />
+              <h3>{brasserie.name}</h3>
+              <p>{brasserie.description}</p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
