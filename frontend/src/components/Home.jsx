@@ -67,41 +67,18 @@ const Home = () => {
   return (
     <div className="home-container">
       <header className="home-header">
+          <div className="text-with-stroke">
         <h1>Bienvenue sur Ubeer - Livraison de bière à domicile</h1>
         <p>Découvrez notre catalogue de bières, regroupées par brasserie, et ajoutez vos bières préférées au panier !</p>
-        <img src={image} alt="Description de l'image" />
-        <Button variant="contained" size="large" color="success">
+      </div>
+        <Button
+          variant="contained"
+          size="large"
+          className="custom-button"
+        >
           Voir toutes les bières
         </Button>
       </header>
-
-      {/* Liste des bières groupées par brasserie */}
-      <section className="beer-catalog">
-        {Object.keys(groupedBeers).map((brewery) => (
-          <Brewery 
-            key={brewery} 
-            breweryName={brewery} 
-            beers={groupedBeers[brewery]} 
-            addToCart={addToCart}
-          />
-        ))}
-      </section>
-
-      {/* Section panier */}
-      <section className="cart-section">
-        <h2>Mon Panier</h2>
-        {cart.length === 0 ? (
-          <p>Votre panier est vide. Ajoutez des bières pour commencer.</p>
-        ) : (
-          <ul>
-            {cart.map((beer, index) => (
-              <li key={index}>
-                {beer.name} - {beer.price}€
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
     </div>
   );
 };
