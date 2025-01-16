@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flasgger import Swagger
 from .models import db  # Importer db depuis models.py
 from .routes import bp as routes_bp
@@ -14,6 +15,8 @@ def create_app():
     db.init_app(app)
 
     Swagger(app)
+
+    CORS(app, origins=["http://localhost:3000"])
 
     # Enregistrement du Blueprint contenant les routes
     app.register_blueprint(routes_bp)
