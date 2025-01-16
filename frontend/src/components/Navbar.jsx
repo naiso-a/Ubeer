@@ -7,11 +7,11 @@ const Navbar = () => {
   return (
     <nav className="navbar">
     <h1 className="navbar-logo">
-      <a href="./" className="no-link-style">Ubeer</a>
+      <a href='../' className="no-link-style">Ubeer</a>
     </h1>
       <ul className="navbar-links">
-        <li><a href="atalog">Catalogue</a></li>
-        <li><a href="./Brewery/Brewery">Brasseries</a></li>
+        <li><a><Link to="/Catalog">Catalogue</Link></a></li>
+        <li><a><Link to="/Brewery">Brasseries</Link></a></li>
         <li><a href="#cart">Panier</a></li>
       </ul>
     </nav>

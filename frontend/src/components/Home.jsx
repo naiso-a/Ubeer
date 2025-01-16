@@ -4,6 +4,7 @@ import Brewery from './Brewery/Brewery.jsx'; // Importer le composant Brewery
 import '../App.css'; // Assurez-vous que le fichier CSS est lié correctement
 import image from '../assets/images.jpg';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 
 
@@ -73,7 +74,7 @@ const Home = () => {
         <p>Découvrez notre catalogue de bières, regroupées par brasserie, et ajoutez vos bières préférées au panier !</p>
       </div>
         <Button
-          href="atalog"
+          href="Catalog"
           variant="contained"
           size="large"
           className="custom-button"
