@@ -63,7 +63,14 @@
   border: 2px solid white; /* Bordure blanche */
 }
 
+
+
 /* NAVBAR.JSX */
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
 .navbar {
   display: flex;
   justify-content: space-between;

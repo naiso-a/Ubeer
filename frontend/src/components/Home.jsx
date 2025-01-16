@@ -73,6 +73,7 @@ const Home = () => {
         <p>Découvrez notre catalogue de bières, regroupées par brasserie, et ajoutez vos bières préférées au panier !</p>
       </div>
         <Button
+          href="atalog"
           variant="contained"
           size="large"
           className="custom-button"
