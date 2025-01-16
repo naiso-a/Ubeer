@@ -6,6 +6,7 @@ import image from '../assets/images.jpg';
 import Button from '@mui/material/Button';
 
 
+
 const Home = () => {
   // Données simulées des bières
   const beers = [
