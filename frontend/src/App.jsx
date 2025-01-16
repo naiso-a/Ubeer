@@ -4,6 +4,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Brewery from "./components/Brewery/Brewery";
+import Catalog from './components/Catalog/Catalog';
 
 function App() {
   return (
@@ -14,16 +15,19 @@ function App() {
         redirect_uri: window.location.origin, // Redirige vers l'URL actuelle après connexion
       }}
     >
-      <div className="App">
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Brewery" element={<Brewery />} />
-          </Routes>
-        </Router>
-      </div>
+    <div className='App'>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/Catalog' element={<Catalog />} />
+          <Route path='/Brewery' element={<Brewery />} />
+        </Routes>
+      </Router>
+      
+    </div>
     </Auth0Provider>
+
   );
 }
 
