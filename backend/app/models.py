@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy # type: ignore
-
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
 # Initialisation de l'instance db
 db = SQLAlchemy()
 
@@ -13,3 +14,19 @@ class Brasserie(db.Model):
 
     def __repr__(self):
         return f"<Brasserie {self.nom}>"
+
+class Beer(db.Model):
+    __tablename__ = 'beer'  # Nom de la table dans la base de données
+
+    id_beer = db.Column(db.Integer, primary_key=True)  # Clé primaire pour la bière
+    name = db.Column(db.String(100), nullable=False)  # Nom de la bière (obligatoire)
+    description = db.Column(db.String(255))  # Description de la bière (facultatif)
+    price = db.Column(db.Numeric(10, 2), nullable=True)  # Prix avec précision décimale
+    degree = db.Column(db.Numeric(10, 2), nullable=True)  # Taux d'alcool avec précision décimale
+    id_brasserie = db.Column(db.Integer, db.ForeignKey('brasserie.id_brasserie'), nullable=False)  # Clé étrangère vers la table Brasserie
+    image_url = db.Column(db.String(255))  # URL de l'image (facultatif)
+
+    def __repr__(self):
+        return f"<Beer {self.nom}>"
+
+
