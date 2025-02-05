@@ -21,7 +21,7 @@ const Navbar = () => {
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </li>
         {isAuthenticated && user?.email === "admin@jesuisleadmin.com" && (
-          <li><Link to="/Admin">Admin</Link></li>
+          <li><Link to="/AdminPage">Admin</Link></li>
         )}
       </ul>
     </nav>
