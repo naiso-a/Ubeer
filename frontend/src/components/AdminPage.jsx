@@ -8,7 +8,7 @@ const AdminPage = () => {
   if (isLoading) return <p>Chargement...</p>;
 
   // Vérifier si l'utilisateur est connecté et a l'email admin
-  if (!isAuthenticated || user?.email !== "admin@example.com") {
+  if (!isAuthenticated || user?.email !== "admin@jesuisleadmin.com") {
     return <Navigate to="/" />;
   }
 
