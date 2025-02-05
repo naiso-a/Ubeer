@@ -9,7 +9,8 @@ const EditBeerForm = () => {
   const [beer, setBeer] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/api/beers/${id}`)
+    const apiUrl = process.env.REACT_APP_API_URL;
+    axios.get(`${apiUrl}/api/beers/${id}`)
       .then(response => {
         setBeer(response.data);
       })
@@ -19,10 +20,11 @@ const EditBeerForm = () => {
   }, [id]);
 
   const handleSubmit = async (e) => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     e.preventDefault();
     
     try {
-      await axios.put(`http://127.0.0.1:5000/api/beers/${id}`, beer);
+      await axios.put(`${apiUrl}/api/beers/${id}`, beer);
       alert('Bière modifiée avec succès');
     } catch (error) {
       console.error('Erreur lors de la modification de la bière', error);

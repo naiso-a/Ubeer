@@ -14,7 +14,8 @@ const EditBreweryForm = () => {
   });
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/api/brasseries/${id}`)
+    const apiUrl = process.env.REACT_APP_API_URL;
+    axios.get(`${apiUrl}/api/brasseries/${id}`)
       .then(response => {
         setBrewery(response.data);
       })
@@ -25,9 +26,10 @@ const EditBreweryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL;
     
     try {
-      await axios.put(`http://127.0.0.1:5000/api/brasseries/${id}`, brewery);
+      await axios.put(`${apiUrl}/api/brasseries/${id}`, brewery);
       alert('Brasserie modifiée avec succès');
       navigate('/Brewery');  
     } catch (error) {

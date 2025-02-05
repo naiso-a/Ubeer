@@ -13,17 +13,20 @@ const AdminPage = () => {
 
   // Récupération des bières et des brasseries
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/beers')
+    const apiUrl = process.env.REACT_APP_API_URL;
+    axios.get(`${apiUrl}/api/beers`)
       .then(response => setBeers(response.data))
       .catch(error => console.error('Erreur lors de la récupération des bières', error));
 
-    axios.get('http://127.0.0.1:5000/api/brasseries')
+    axios.get(`${apiUrl}/api/brasseries`)
       .then(response => setBrasseries(response.data))
       .catch(error => console.error('Erreur lors de la récupération des brasseries', error));
   }, []);
 
   const deleteBeer = (id) => {
-    axios.delete(`http://127.0.0.1:5000/api/beers/${id}`)
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    axios.delete(`${apiUrl}/api/beers/${id}`)
       .then(() => {
         setBeers(beers.filter(beer => beer.id !== id));  // Mettre à jour l'état des bières
         alert('Bière supprimée avec succès');
@@ -36,7 +39,8 @@ const AdminPage = () => {
 
   // Supprimer une brasserie
   const deleteBrewery = (id) => {
-    axios.delete(`http://127.0.0.1:5000/api/brasseries/${id}`)
+    const apiUrl = process.env.REACT_APP_API_URL;
+    axios.delete(`${apiUrl}/api/brasseries/${id}`)
       .then(() => {
         setBrasseries(brasseries.filter(brewery => brewery.id !== id));  // Supprimer la brasserie de l'état
         alert('Brasserie supprimée avec succès');

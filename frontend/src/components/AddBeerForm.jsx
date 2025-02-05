@@ -26,6 +26,8 @@ const AddBeerForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -40,7 +42,7 @@ const AddBeerForm = () => {
     };
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/beers', newBeer);
+      await axios.post(`${apiUrl}/api/beers`, newBeer);
       alert('Bière ajoutée avec succès');
       setName('');
       setDescription('');

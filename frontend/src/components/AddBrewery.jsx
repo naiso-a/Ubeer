@@ -10,6 +10,8 @@ const AddBreweryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     
     const newBrewery = {
       name, 
@@ -18,7 +20,7 @@ const AddBreweryForm = () => {
     };
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/brasseries', newBrewery);
+      await axios.post(`${apiUrl}/api/brasseries`, newBrewery);
       alert('Brasserie ajoutée avec succès');
     } catch (error) {
       console.error("Erreur lors de l'ajout de la brasserie", error);
