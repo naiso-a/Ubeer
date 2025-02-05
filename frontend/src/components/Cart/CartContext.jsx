@@ -1,16 +1,14 @@
 import React, { createContext, useState } from "react";
 
-// Création du contexte
 export const CartContext = createContext();
 
-// Fournisseur du contexte
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
 
   const addToCart = (beer) => {
     const updatedCart = [...cart, beer];
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart)); // Stocker dans localStorage
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
   const removeFromCart = (index) => {

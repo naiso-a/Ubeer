@@ -207,3 +207,121 @@ def add_beer():
         # Gérer les erreurs (exemple : clé étrangère invalide)
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+    
+@bp.route('/beers/<int:beer_id>', methods=['PUT'])
+def update_beer(beer_id):
+    """
+    Update an existing beer.
+    ---
+    tags:
+      - Beers
+    parameters:
+      - in: path
+        name: beer_id
+        required: true
+        schema:
+          type: integer
+        description: ID of the beer to update
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Updated Beer Name"
+              description:
+                type: string
+                example: "Updated description"
+              price:
+                type: number
+                format: float
+                example: 6.5
+              degree:
+                type: number
+                format: float
+                example: 5.2
+              image_url:
+                type: string
+                example: "http://example.com/updated_beer.jpg"
+              id_brasserie:
+                type: integer
+                example: 2
+    responses:
+      200:
+        description: Beer successfully updated
+      404:
+        description: Beer not found
+      400:
+        description: Invalid input
+    """
+    data = request.json
+    beer = Beer.query.get(beer_id)
+
+    if not beer:
+        return jsonify({"error": "Beer not found"}), 404
+
+    # Mise à jour des champs (uniquement ceux fournis)
+    if "name" in data:
+        beer.name = data["name"]
+    if "description" in data:
+        beer.description = data["description"]
+    if "price" in data:
+        beer.price = data["price"]
+    if "degree" in data:
+        beer.degree = data["degree"]
+    if "image_url" in data:
+        beer.image_url = data["image_url"]
+    if "id_brasserie" in data:
+        beer.id_brasserie = data["id_brasserie"]
+
+    try:
+        db.session.commit()
+        return jsonify({
+            "id": beer.id_beer,
+            "name": beer.name,
+            "description": beer.description,
+            "price": float(beer.price),
+            "degree": float(beer.degree),
+            "id_brasserie": beer.id_brasserie,
+            "image_url": beer.image_url
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
+
+
+@bp.route('/beers/<int:beer_id>', methods=['DELETE'])
+def delete_beer(beer_id):
+    """
+    Delete a beer by ID.
+    ---
+    tags:
+      - Beers
+    parameters:
+      - in: path
+        name: beer_id
+        required: true
+        schema:
+          type: integer
+        description: ID of the beer to delete
+    responses:
+      200:
+        description: Beer successfully deleted
+      404:
+        description: Beer not found
+    """
+    beer = Beer.query.get(beer_id)
+
+    if not beer:
+        return jsonify({"error": "Beer not found"}), 404
+
+    try:
+        db.session.delete(beer)
+        db.session.commit()
+        return jsonify({"message": "Beer successfully deleted"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
