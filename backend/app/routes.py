@@ -291,6 +291,7 @@ def update_beer(beer_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+    
 @bp.route('/beers/<int:beer_id>', methods=['DELETE'])
 def delete_beer(beer_id):
     """
@@ -324,3 +325,37 @@ def delete_beer(beer_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
     
+@bp.route('/beers/<int:beer_id>', methods=['GET'])
+def get_beer(beer_id):
+    """
+    Get a single beer by ID.
+    ---
+    tags:
+      - Beers
+    parameters:
+      - in: path
+        name: beer_id
+        required: true
+        schema:
+          type: integer
+        description: ID of the beer to retrieve
+    responses:
+      200:
+        description: Beer found
+      404:
+        description: Beer not found
+    """
+    beer = Beer.query.get(beer_id)
+
+    if not beer:
+        return jsonify({"error": "Beer not found"}), 404
+
+    return jsonify({
+        "id": beer.id_beer,
+        "name": beer.name,
+        "description": beer.description,
+        "price": float(beer.price),
+        "degree": float(beer.degree),
+        "id_brasserie": beer.id_brasserie,
+        "image_url": beer.image_url
+    }), 200
