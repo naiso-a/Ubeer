@@ -16,7 +16,7 @@ const Navbar = () => {
       <ul className="navbar-links">
       <li><a><Link to="/Catalog">Catalogue</Link></a></li>
       <li><a><Link to="/Brewery">Brasseries</Link></a></li>
-        <li><a href="#cart">Panier</a></li>
+        <li><a href="/Cart">Panier</a></li>
         <li>
           {/* Si l'utilisateur est connecté, affiche le bouton de déconnexion, sinon le bouton de connexion */}
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}

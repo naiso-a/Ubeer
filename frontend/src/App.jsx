@@ -1,11 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { CartProvider } from "./components/CartContext";  // Import du contexte
+import { CartProvider } from "./components/Cart/CartContext";  // Vérifie bien le chemin !
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Brewery from "./components/Brewery/Brewery";
 import Catalog from './components/Catalog/Catalog';
+import Cart from "./components/Cart/Cart";
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/Catalog' element={<Catalog />} />
               <Route path='/Brewery' element={<Brewery />} />
+              <Route path='/Cart' element={<Cart />} />  {/* Ajout de la route pour le panier */}
             </Routes>
           </Router>
         </div>
