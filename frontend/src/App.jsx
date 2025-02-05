@@ -28,6 +28,7 @@ function App() {
               <Route path='/Catalog' element={<Catalog />} />
               <Route path='/Brewery' element={<Brewery />} />
               <Route path='/Cart' element={<Cart />} />  {/* Ajout de la route pour le panier */}
+              <Route path='/AdminPage' element={<AdminPage />} />
             </Routes>
           </Router>
         </div>
