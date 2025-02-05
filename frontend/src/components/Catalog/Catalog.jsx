@@ -10,7 +10,7 @@ import '../../App.css';
 
 const Catalog = () => {
   const [beers, setBeers] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
 
   // Récupération des bières depuis l'API
   useEffect(() => {
@@ -19,8 +19,11 @@ const Catalog = () => {
       .catch(error => console.error('Erreur lors de la récupération des bières:', error));
   }, []);
 
+  // Ajouter une bière au panier et sauvegarder dans localStorage
   const addToCart = (beer) => {
-    setCart([...cart, beer]);
+    const updatedCart = [...cart, beer];
+    setCart(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart)); // Sauvegarde
   };
 
   return (
@@ -56,7 +59,7 @@ const Catalog = () => {
         ))}
       </Grid>
       <Button
-        href="Cart"
+        href="/Cart"
         variant="contained"
         size="large"
         className="custom-button"

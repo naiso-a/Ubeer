@@ -14,9 +14,9 @@ const Navbar = () => {
         <Link to="/" className="no-link-style">Ubeer</Link>
       </h1>
       <ul className="navbar-links">
-        <li><Link to="/Catalog">Catalogue</Link></li>
-        <li><Link to="/Brewery">Brasseries</Link></li>
-        <li><Link to="/cart">Panier</Link></li>
+      <li><a><Link to="/Catalog">Catalogue</Link></a></li>
+      <li><a><Link to="/Brewery">Brasseries</Link></a></li>
+        <li><a href="/Cart">Panier</a></li>
         <li>
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </li>
