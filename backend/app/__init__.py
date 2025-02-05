@@ -1,8 +1,10 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from flasgger import Swagger
 from .models import db  # Importer db depuis models.py
 from .routes import bp as routes_bp
+from dotenv import load_dotenv
 
 def create_app():
     app = Flask(__name__)
@@ -16,7 +18,9 @@ def create_app():
 
     Swagger(app)
 
-    CORS(app, origins=["http://localhost:3000"])
+    front_url = os.getenv("FRONT_URL", "http://localhost:3000")
+
+    CORS(app, origins=[front_url])
 
     # Enregistrement du Blueprint contenant les routes
     app.register_blueprint(routes_bp)
