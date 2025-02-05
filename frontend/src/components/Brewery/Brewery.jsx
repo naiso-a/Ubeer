@@ -7,8 +7,10 @@ const Brewery = () => {
 
   useEffect(() => {
     const fetchBrasseries = async () => {
+      const apiUrl = process.env.REACT_APP_API_URL;
+      
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/brasseries');
+        const response = await fetch(`${apiUrl}/api/brasseries`);
         
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des brasseries');

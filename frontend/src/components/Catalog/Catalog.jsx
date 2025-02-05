@@ -14,7 +14,9 @@ const Catalog = () => {
 
   // Récupération des bières depuis l'API
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/beers')
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    axios.get(`${apiUrl}/api/beers`)
       .then(response => setBeers(response.data))
       .catch(error => console.error('Erreur lors de la récupération des bières:', error));
   }, []);
