@@ -1,6 +1,5 @@
 import React from 'react';
 import '../App.css';
-import "./Brewery/Brewery";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LoginButton";  // Assurez-vous que le fichier LoginButton.jsx existe
 import LogoutButton from "./Logout";  //

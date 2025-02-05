@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from .models import Brasserie, Beer, db
 
-bp = Blueprint('routes', __name__)
+bp = Blueprint('routes', __name__, url_prefix='/api')
 
 @bp.route('/brasseries', methods=['GET'])
 def get_brasseries():
