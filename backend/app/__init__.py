@@ -18,7 +18,7 @@ def create_app():
 
     Swagger(app)
 
-    front_url = os.getenv("FRONT_URL", "http://localhost:3000")
+    front_url = os.getenv("FRONT_URL")
 
     CORS(app, origins=[front_url])
 
