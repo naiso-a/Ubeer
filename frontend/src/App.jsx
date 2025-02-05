@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { CartProvider } from "./components/CartContext";  // Import du contexte
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Brewery from "./components/Brewery/Brewery";
@@ -15,17 +16,18 @@ function App() {
         redirect_uri: window.location.origin, // Redirige vers l'URL actuelle après connexion
       }}
     >
-    <div className='App'>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/Catalog' element={<Catalog />} />
-          <Route path='/Brewery' element={<Brewery />} />
-        </Routes>
-      </Router>
-      
-    </div>
+    <CartProvider>  {/* Ajout du CartProvider ici */}
+        <div className='App'>
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/Catalog' element={<Catalog />} />
+              <Route path='/Brewery' element={<Brewery />} />
+            </Routes>
+          </Router>
+        </div>
+      </CartProvider>
     </Auth0Provider>
 
   );
