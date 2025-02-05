@@ -7,7 +7,11 @@ import TextField from '@mui/material/TextField';
 const EditBreweryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [brewery, setBrewery] = useState(null);
+  const [brewery, setBrewery] = useState({
+    name: '',
+    description: '',
+    image_url: ''
+  });
 
   useEffect(() => {
     axios.get(`http://127.0.0.1:5000/api/brasseries/${id}`)
@@ -25,7 +29,7 @@ const EditBreweryForm = () => {
     try {
       await axios.put(`http://127.0.0.1:5000/api/brasseries/${id}`, brewery);
       alert('Brasserie modifiée avec succès');
-      navigate('/Brewery');  // Redirection vers la liste des brasseries après modification
+      navigate('/Brewery');  
     } catch (error) {
       console.error('Erreur lors de la modification de la brasserie', error);
     }
@@ -50,17 +54,9 @@ const EditBreweryForm = () => {
           margin="normal"
         />
         <TextField
-          label="Localisation"
-          name="location"
-          value={brewery.location}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Type de brasserie"
-          name="brewery_type"
-          value={brewery.brewery_type}
+          label="Description"
+          name="description"
+          value={brewery.description}
           onChange={handleChange}
           fullWidth
           margin="normal"
