@@ -10,9 +10,25 @@ const AddBeerForm = () => {
   const [degree, setDegree] = useState('');
   const [idBrasserie, setIdBrasserie] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let newErrors = {};
+    if (!name) newErrors.name = 'Le nom est requis';
+    if (!description) newErrors.description = 'La description est requise';
+    if (!price || isNaN(price)) newErrors.price = 'Le prix doit être un nombre valide';
+    if (!degree || isNaN(degree)) newErrors.degree = 'Le degré doit être un nombre valide';
+    if (!idBrasserie || isNaN(idBrasserie)) newErrors.idBrasserie = 'L\'ID brasserie doit être un nombre valide';
+    if (!imageUrl) newErrors.imageUrl = 'L\'URL de l\'image est requise';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
     
     const newBeer = {
       name,
@@ -26,7 +42,15 @@ const AddBeerForm = () => {
     try {
       await axios.post('http://127.0.0.1:5000/api/beers', newBeer);
       alert('Bière ajoutée avec succès');
+      setName('');
+      setDescription('');
+      setPrice('');
+      setDegree('');
+      setIdBrasserie('');
+      setImageUrl('');
+      setErrors({});
     } catch (error) {
+      alert('Erreur lors de l\'ajout de la bière. Vérifiez la console pour plus de détails.');
       console.error('Erreur lors de l\'ajout de la bière', error);
     }
   };
@@ -41,6 +65,8 @@ const AddBeerForm = () => {
           onChange={(e) => setName(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.name}
+          helperText={errors.name}
         />
         <TextField
           label="Description"
@@ -48,6 +74,8 @@ const AddBeerForm = () => {
           onChange={(e) => setDescription(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.description}
+          helperText={errors.description}
         />
         <TextField
           label="Prix"
@@ -55,6 +83,8 @@ const AddBeerForm = () => {
           onChange={(e) => setPrice(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.price}
+          helperText={errors.price}
         />
         <TextField
           label="Degré"
@@ -62,6 +92,8 @@ const AddBeerForm = () => {
           onChange={(e) => setDegree(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.degree}
+          helperText={errors.degree}
         />
         <TextField
           label="ID Brasserie"
@@ -69,6 +101,8 @@ const AddBeerForm = () => {
           onChange={(e) => setIdBrasserie(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.idBrasserie}
+          helperText={errors.idBrasserie}
         />
         <TextField
           label="URL de l'image"
@@ -76,6 +110,8 @@ const AddBeerForm = () => {
           onChange={(e) => setImageUrl(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!errors.imageUrl}
+          helperText={errors.imageUrl}
         />
         <Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
           Ajouter la bière
