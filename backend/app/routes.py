@@ -438,3 +438,35 @@ def get_beer(beer_id):
         "id_brasserie": beer.id_brasserie,
         "image_url": beer.image_url
     }), 200
+
+@bp.route('/brasseries/<int:brasserie_id>', methods=['GET'])
+def get_brasserie(brasserie_id):
+    """
+    Get a single brasserie by ID.
+    ---
+    tags:
+      - Brasseries
+    parameters:
+      - in: path
+        name: brasserie_id
+        required: true
+        schema:
+          type: integer
+        description: ID of the brasserie to retrieve
+    responses:
+      200:
+        description: Brasserie found
+      404:
+        description: Brasserie not found
+    """
+    brasserie = Brasserie.query.get(brasserie_id)
+
+    if not brasserie:
+        return jsonify({"error": "Brasserie not found"}), 404
+
+    return jsonify({
+        "id": brasserie.id_brasserie,
+        "name": brasserie.name,
+        "description": brasserie.description,
+        "image_url": brasserie.image_url
+    }), 200

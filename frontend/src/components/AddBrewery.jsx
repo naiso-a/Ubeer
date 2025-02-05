@@ -18,7 +18,7 @@ const AddBreweryForm = () => {
     };
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/breweries', newBrewery);
+      await axios.post('http://127.0.0.1:5000/api/brasseries', newBrewery);
       alert('Brasserie ajoutée avec succès');
     } catch (error) {
       console.error("Erreur lors de l'ajout de la brasserie", error);

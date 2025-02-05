@@ -13,7 +13,7 @@ class Brasserie(db.Model):
     image_url = db.Column(db.String(100))  # Exemple de champ "ville"
 
     def __repr__(self):
-        return f"<Brasserie {self.nom}>"
+        return f"<Brasserie {self.name}>"
 
 class Beer(db.Model):
     __tablename__ = 'beer'  # Nom de la table dans la base de données
@@ -27,6 +27,6 @@ class Beer(db.Model):
     image_url = db.Column(db.String(255))  # URL de l'image (facultatif)
 
     def __repr__(self):
-        return f"<Beer {self.nom}>"
+        return f"<Beer {self.name}>"
 
 
