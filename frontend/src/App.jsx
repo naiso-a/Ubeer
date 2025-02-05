@@ -8,7 +8,8 @@ import Brewery from "./components/Brewery/Brewery";
 import Catalog from './components/Catalog/Catalog';
 import AdminPage from "./components/AdminPage";
 import Cart from "./components/Cart/Cart";
-
+import AddBeerForm from './components/AddBeerForm';
+import EditBeerForm from './components/EditBeerForm'
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
               <Route path='/Brewery' element={<Brewery />} />
               <Route path='/Cart' element={<Cart />} />  {/* Ajout de la route pour le panier */}
               <Route path='/AdminPage' element={<AdminPage />} />
+              <Route path="/admin/add-beer" element={<AddBeerForm />} />
+              <Route path="/admin/edit-beer/:id" element={<EditBeerForm />} />
             </Routes>
           </Router>
         </div>
