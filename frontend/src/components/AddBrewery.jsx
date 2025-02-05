@@ -5,25 +5,23 @@ import TextField from '@mui/material/TextField';
 
 const AddBreweryForm = () => {
   const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
-  const [breweryType, setBreweryType] = useState('');
+  const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     const newBrewery = {
-      name,
-      location,
-      brewery_type: breweryType,
-      image_url: imageUrl,
+      name, 
+      description, 
+      image_url: imageUrl, // Correspondance avec la base de données
     };
 
     try {
       await axios.post('http://127.0.0.1:5000/api/breweries', newBrewery);
       alert('Brasserie ajoutée avec succès');
     } catch (error) {
-      console.error('Erreur lors de l\'ajout de la brasserie', error);
+      console.error("Erreur lors de l'ajout de la brasserie", error);
     }
   };
 
@@ -39,16 +37,9 @@ const AddBreweryForm = () => {
           margin="normal"
         />
         <TextField
-          label="Emplacement"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Type de Brasserie"
-          value={breweryType}
-          onChange={(e) => setBreweryType(e.target.value)}
+          label="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           fullWidth
           margin="normal"
         />

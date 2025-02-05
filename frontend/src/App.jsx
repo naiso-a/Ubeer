@@ -11,6 +11,7 @@ import Cart from "./components/Cart/Cart";
 import AddBeerForm from './components/AddBeerForm';
 import EditBeerForm from './components/EditBeerForm'
 import AddBreweryForm from "./components/AddBrewery";
+import EditBreweryForm from "./components/EditBreweryForm";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               <Route path="/admin/add-beer" element={<AddBeerForm />} />
               <Route path="/admin/edit-beer/:id" element={<EditBeerForm />} />
               <Route path="/admin/add-brewery" element={<AddBreweryForm/>} />
+              <Route path="/admin/edit-brewery/:id" element={<EditBreweryForm />} />
             </Routes>
           </Router>
         </div>

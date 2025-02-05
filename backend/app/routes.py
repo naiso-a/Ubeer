@@ -3,6 +3,85 @@ from .models import Brasserie, Beer, db
 
 bp = Blueprint('routes', __name__, url_prefix='/api')
 
+@bp.route('/brasseries', methods=['POST'])
+def add_brasserie():
+    """
+    Add a new brasserie to the database.
+    """
+    data = request.json
+    
+    required_fields = ['name', 'description', 'image_url']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'error': f'Missing field: {field}'}), 400
+    
+    try:
+        new_brasserie = Brasserie(
+            name=data['name'],
+            description=data['description'],
+            image_url=data['image_url']
+        )
+        db.session.add(new_brasserie)
+        db.session.commit()
+        
+        return jsonify({
+            'id': new_brasserie.id_brasserie,
+            'name': new_brasserie.name,
+            'description': new_brasserie.description,
+            'image_url': new_brasserie.image_url
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+@bp.route('/brasseries/<int:brasserie_id>', methods=['PUT'])
+def update_brasserie(brasserie_id):
+    """
+    Update an existing brasserie.
+    """
+    data = request.json
+    brasserie = Brasserie.query.get(brasserie_id)
+    
+    if not brasserie:
+        return jsonify({'error': 'Brasserie not found'}), 404
+    
+    if 'name' in data:
+        brasserie.name = data['name']
+    if 'description' in data:
+        brasserie.description = data['description']
+    if 'image_url' in data:
+        brasserie.image_url = data['image_url']
+    
+    try:
+        db.session.commit()
+        return jsonify({
+            'id': brasserie.id_brasserie,
+            'name': brasserie.name,
+            'description': brasserie.description,
+            'image_url': brasserie.image_url
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+@bp.route('/brasseries/<int:brasserie_id>', methods=['DELETE'])
+def delete_brasserie(brasserie_id):
+    """
+    Delete a brasserie by ID.
+    """
+    brasserie = Brasserie.query.get(brasserie_id)
+    
+    if not brasserie:
+        return jsonify({'error': 'Brasserie not found'}), 404
+    
+    try:
+        db.session.delete(brasserie)
+        db.session.commit()
+        return jsonify({'message': 'Brasserie successfully deleted'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
 @bp.route('/brasseries', methods=['GET'])
 def get_brasseries():
     """
