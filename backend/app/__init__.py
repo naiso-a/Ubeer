@@ -1,6 +1,5 @@
 import os
 from flask import Flask
-from flask_cors import CORS
 from flasgger import Swagger
 from .models import db  # Importer db depuis models.py
 from .routes import bp as routes_bp
