@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 from .models import db
 from .routes import bp as routes_bp
 
+
 load_dotenv()  # chargement du .env
+
 
 def create_app():
     app = Flask(__name__)
@@ -15,7 +17,8 @@ def create_app():
     # Configuration de la base de données MySQL
     app.config['SQLALCHEMY_DATABASE_URI'] = (
         'mysql+mysqlconnector://unlct7omaelffxqp:PPI2yf7xoWJNIOoQA1K3@'
-        'bbi9zrvl4akmfehwfapy-mysql.services.clever-cloud.com:3306/bbi9zrvl4akmfehwfapy'
+        'bbi9zrvl4akmfehwfapy-mysql.services.clever-cloud.com:3306/'
+        'bbi9zrvl4akmfehwfapy'
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
