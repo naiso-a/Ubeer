@@ -1,0 +1,70 @@
+stages:
+  - lint
+  - quality
+  - build
+
+# --- Linter backend (Python) ---
+lint-backend:
+  stage: lint
+  image: python:3.11
+  before_script:
+    - pip install flake8
+  script:
+    - cd backend
+    - flake8 .
+
+# --- Linter frontend (React) ---
+lint-frontend:
+  stage: lint
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npx eslint .
+
+# --- Analyse SonarCloud backend ---
+sonar-backend:
+  stage: quality
+  image: sonarsource/sonar-scanner-cli
+  script:
+    - cd backend
+    - sonar-scanner
+
+# --- Analyse SonarCloud frontend ---
+sonar-frontend:
+  stage: quality
+  image: sonarsource/sonar-scanner-cli
+  script:
+    - cd frontend
+    - sonar-scanner
+
+# --- Trivy (scan vulnérabilités) ---
+trivy-scan:
+  stage: quality
+  image: aquasec/trivy
+  script:
+    - trivy fs .
+
+# --- Build Backend (.whl) ---
+build-backend:
+  stage: build
+  image: python:3.11
+  script:
+    - cd backend
+    - pip install poetry
+    - poetry build
+  artifacts:
+    paths:
+      - backend/dist/
+
+# --- Build Frontend (React) ---
+build-frontend:
+  stage: build
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
