@@ -38,12 +38,20 @@ sonar-frontend:
     - cd frontend
     - sonar-scanner
 
-# --- Trivy (scan vulnérabilités) ---
-trivy-scan:
+# --- Trivy Scan Backend ---
+trivy-backend:
   stage: quality
   image: aquasec/trivy
   script:
-    - trivy fs .
+    - trivy fs backend/
+
+# --- Trivy Scan Frontend ---
+trivy-frontend:
+  stage: quality
+  image: aquasec/trivy
+  script:
+    - trivy fs frontend/
+
 
 # --- Build Backend (.whl) ---
 build-backend:
