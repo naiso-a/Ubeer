@@ -56,10 +56,6 @@ trivy-scan:
   image: 
     name: aquasec/trivy
     entrypoint: [""]
-  before_script:
-    - wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz
-    - tar -xzf trivy_Linux-64bit.tar.gz
-    - mv trivy /usr/local/bin/
   script:
     - trivy fs .
   only:
