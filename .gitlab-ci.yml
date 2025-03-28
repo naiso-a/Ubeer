@@ -1,3 +1,7 @@
+variables:
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Définit le cache pour Sonar
+  GIT_DEPTH: "0"  # Permet de récupérer tout l'historique git, nécessaire pour Sonar
+
 stages:
   - lint
   - quality
@@ -29,6 +33,10 @@ sonar-backend:
   script:
     - cd backend
     - sonar-scanner
+  only:
+    - merge_requests
+    - main
+    - develop
 
 # --- Analyse SonarCloud frontend ---
 sonar-frontend:
@@ -37,21 +45,17 @@ sonar-frontend:
   script:
     - cd frontend
     - sonar-scanner
+  only:
+    - merge_requests
+    - main
+    - develop
 
-# --- Trivy Scan Backend ---
-trivy-backend:
+# --- Trivy (scan vulnérabilités) ---
+trivy-scan:
   stage: quality
   image: aquasec/trivy
   script:
-    - trivy fs backend/
-
-# --- Trivy Scan Frontend ---
-trivy-frontend:
-  stage: quality
-  image: aquasec/trivy
-  script:
-    - trivy fs frontend/
-
+    - trivy fs .
 
 # --- Build Backend (.whl) ---
 build-backend:
