@@ -51,15 +51,13 @@ sonar-frontend:
     - develop
 
 # --- Trivy (scan vulnérabilités) ---
-security_scan:
+trivy-scan:
   stage: security
-  before_script:
-    - wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz
-    - tar -xzf trivy_Linux-64bit.tar.gz
-    - mv trivy /usr/local/bin/
+  image: aquasec/trivy
   script:
     - trivy fs .
   only:
+    - merge_requests
     - main
     - develop
 
