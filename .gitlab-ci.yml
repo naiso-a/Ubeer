@@ -52,7 +52,7 @@ sonar-frontend:
 
 # --- Trivy (scan vulnérabilités) ---
 trivy-scan:
-  stage: security
+  stage: quality
   image: aquasec/trivy
   script:
     - trivy fs .
