@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy # type: ignore
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey  # Make sure sqlalchemy is installed: pip install sqlalchemy
 from sqlalchemy.orm import relationship
 # Initialisation de l'instance db
 db = SQLAlchemy()
