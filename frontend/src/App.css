@@ -121,4 +121,22 @@
 .text-with-stroke p {
   font-size: 1.5rem; /* Ajustez la taille selon vos besoins */
 }
+body {
+  background-color: #f5f5dc; /* beige clair */
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.catalog-container {
+  padding: 20px;
+}
+
+.MuiCard-root {
+  border: 2px solid black; /* contour noir autour de chaque carte */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* NAVBAR.JSX */
