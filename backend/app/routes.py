@@ -13,12 +13,10 @@ def add_brasserie():
     Add a new brasserie to the database.
     """
     data = request.json
-
     required_fields = ['name', 'description', 'image_url','latitude','longitude']
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}'}), 400
-
     try:
         new_brasserie = Brasserie(
             name=data['name'],
@@ -26,12 +24,10 @@ def add_brasserie():
             image_url=data['image_url'],
             latitude=data['latitude'],
             longitude=data['longitude']
-
-
         )
         db.session.add(new_brasserie)
         db.session.commit()
-
+        r.delete('brasseries_all')  # Invalider le cache
         return jsonify({
             'id': new_brasserie.id_brasserie,
             'name': new_brasserie.name,
@@ -52,22 +48,18 @@ def update_brasserie(brasserie_id):
     """
     data = request.json
     brasserie = Brasserie.query.get(brasserie_id)
-
     if not brasserie:
         return jsonify({'error': 'Brasserie not found'}), 404
 
-    if 'name' in data:
-        brasserie.name = data['name']
-    if 'description' in data:
-        brasserie.description = data['description']
-    if 'image_url' in data:
-        brasserie.image_url = data['image_url']
-    if 'latitude' in data:
-        brasserie.latitude = data['latitude']
-    if 'longitude' in data:
-        brasserie.longitude = data['longitude']
+    if 'name' in data: brasserie.name = data['name']
+    if 'description' in data: brasserie.description = data['description']
+    if 'image_url' in data: brasserie.image_url = data['image_url']
+    if 'latitude' in data: brasserie.latitude = data['latitude']
+    if 'longitude' in data: brasserie.longitude = data['longitude']
+
     try:
         db.session.commit()
+        r.delete('brasseries_all')  # Invalider le cache
         return jsonify({
             'id': brasserie.id_brasserie,
             'name': brasserie.name,
@@ -83,17 +75,16 @@ def update_brasserie(brasserie_id):
 
 @bp.route('/brasseries/<int:brasserie_id>', methods=['DELETE'])
 def delete_brasserie(brasserie_id):
-    """
+    """ 
     Delete a brasserie by ID.
     """
     brasserie = Brasserie.query.get(brasserie_id)
-
     if not brasserie:
         return jsonify({'error': 'Brasserie not found'}), 404
-
     try:
         db.session.delete(brasserie)
         db.session.commit()
+        r.delete('brasseries_all')  # Invalider le cache
         return jsonify({'message': 'Brasserie successfully deleted'}), 200
     except Exception as e:
         db.session.rollback()
@@ -102,6 +93,13 @@ def delete_brasserie(brasserie_id):
 
 @bp.route('/brasseries', methods=['GET'])
 def get_brasseries():
+    cache_key = 'brasseries_all'
+    cached_data = r.get(cache_key)
+
+    if cached_data:
+        print("→ Données brasseries depuis Redis")
+        return jsonify(json.loads(cached_data))
+
     """
     Get all brasseries.
     """
@@ -116,11 +114,21 @@ def get_brasseries():
             'latitude': brasserie.latitude,
             'longitude': brasserie.longitude,
         })
+    r.setex(cache_key, 3600, json.dumps(result))  # Cache 1h
+    print("→ Données brasseries depuis MySQL")
     return jsonify(result)
 
 
 @bp.route('/beers', methods=['GET'])
 def get_beers():
+    cache_key = 'beers_all'
+    cached_data = r.get(cache_key)
+
+    if cached_data:
+        print("→ Données bières depuis Redis")
+        return jsonify(json.loads(cached_data))
+    
+
     """
     Get all beers.
     """
@@ -134,6 +142,9 @@ def get_beers():
         'image_url': beer.image_url,
         'id_brasserie': beer.id_brasserie
     } for beer in beers]
+
+    r.setex(cache_key, 3600, json.dumps(result))
+    print("→ Données bières depuis MySQL")
     return jsonify(result)
 
 
@@ -143,12 +154,10 @@ def add_beer():
     Add a new beer to the database.
     """
     data = request.json
-
     required_fields = ['name', 'price', 'degree', 'id_brasserie']
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}'}), 400
-
     try:
         new_beer = Beer(
             name=data['name'],
@@ -160,7 +169,7 @@ def add_beer():
         )
         db.session.add(new_beer)
         db.session.commit()
-
+        r.delete('beers_all')  # Invalider le cache
         return jsonify({
             'id': new_beer.id_beer,
             'name': new_beer.name,
@@ -182,25 +191,19 @@ def update_beer(beer_id):
     """
     data = request.json
     beer = Beer.query.get(beer_id)
-
     if not beer:
         return jsonify({"error": "Beer not found"}), 404
 
-    if "name" in data:
-        beer.name = data["name"]
-    if "description" in data:
-        beer.description = data["description"]
-    if "price" in data:
-        beer.price = data["price"]
-    if "degree" in data:
-        beer.degree = data["degree"]
-    if "image_url" in data:
-        beer.image_url = data["image_url"]
-    if "id_brasserie" in data:
-        beer.id_brasserie = data["id_brasserie"]
+    if "name" in data: beer.name = data["name"]
+    if "description" in data: beer.description = data["description"]
+    if "price" in data: beer.price = data["price"]
+    if "degree" in data: beer.degree = data["degree"]
+    if "image_url" in data: beer.image_url = data["image_url"]
+    if "id_brasserie" in data: beer.id_brasserie = data["id_brasserie"]
 
     try:
         db.session.commit()
+        r.delete('beers_all')  # Invalider le cache
         return jsonify({
             "id": beer.id_beer,
             "name": beer.name,
@@ -215,19 +218,19 @@ def update_beer(beer_id):
         return jsonify({"error": str(e)}), 400
 
 
+
 @bp.route('/beers/<int:beer_id>', methods=['DELETE'])
 def delete_beer(beer_id):
     """
     Delete a beer by ID.
     """
     beer = Beer.query.get(beer_id)
-
     if not beer:
         return jsonify({"error": "Beer not found"}), 404
-
     try:
         db.session.delete(beer)
         db.session.commit()
+        r.delete('beers_all')  # Invalider le cache
         return jsonify({"message": "Beer successfully deleted"}), 200
     except Exception as e:
         db.session.rollback()
@@ -240,10 +243,8 @@ def get_beer(beer_id):
     Get a single beer by ID.
     """
     beer = Beer.query.get(beer_id)
-
     if not beer:
         return jsonify({"error": "Beer not found"}), 404
-
     return jsonify({
         "id": beer.id_beer,
         "name": beer.name,
@@ -261,10 +262,8 @@ def get_brasserie(brasserie_id):
     Get a single brasserie by ID.
     """
     brasserie = Brasserie.query.get(brasserie_id)
-
     if not brasserie:
         return jsonify({"error": "Brasserie not found"}), 404
-
     return jsonify({
         "id": brasserie.id_brasserie,
         "name": brasserie.name,
