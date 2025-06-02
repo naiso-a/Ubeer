@@ -1,5 +1,11 @@
 # UBeer
 
+## Jused Adinsi et MArtin Khyari B3 C2
+
+## url de la prod : https://ubeer-seven.vercel.app/
+
+### Description
+
 UBeer est une application web permettant de consulter, commander et gérer des bières artisanales ainsi que leurs brasseries. Elle est composée d'un frontend en React, d’un backend en Flask (Python), d'une base de données MySQL et d’un système de cache Redis. Le tout est déployé sur Vercel et Clever Cloud.
 
 ## Fonctionnalités principales
