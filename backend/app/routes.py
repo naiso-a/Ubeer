@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from .models import Brasserie, Beer, db
+from .redis_client import redis_client as r
+import json
 
 
 bp = Blueprint('routes', __name__, url_prefix='/api')
@@ -11,13 +13,8 @@ def add_brasserie():
     Add a new brasserie to the database.
     """
     data = request.json
-<<<<<<< HEAD
 
-    required_fields = ['name', 'description', 'image_url']
-=======
-    
     required_fields = ['name', 'description', 'image_url','latitude','longitude']
->>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}'}), 400
@@ -65,15 +62,10 @@ def update_brasserie(brasserie_id):
         brasserie.description = data['description']
     if 'image_url' in data:
         brasserie.image_url = data['image_url']
-<<<<<<< HEAD
-
-=======
     if 'latitude' in data:
         brasserie.latitude = data['latitude']
     if 'longitude' in data:
         brasserie.longitude = data['longitude']
-    
->>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     try:
         db.session.commit()
         return jsonify({
@@ -114,16 +106,6 @@ def get_brasseries():
     Get all brasseries.
     """
     brasseries = Brasserie.query.all()
-<<<<<<< HEAD
-    result = [{
-        'id': brasserie.id_brasserie,
-        'name': brasserie.name,
-        'description': brasserie.description,
-        'image_url': brasserie.image_url
-    } for brasserie in brasseries]
-=======
-
-    # Créer une liste de dictionnaires avec les données des brasseries
     result = []
     for brasserie in brasseries:
         result.append({
@@ -134,9 +116,6 @@ def get_brasseries():
             'latitude': brasserie.latitude,
             'longitude': brasserie.longitude,
         })
-
-    # Retourner les données sous forme de JSON
->>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     return jsonify(result)
 
 
