@@ -143,7 +143,7 @@ def get_beers():
         'id_brasserie': beer.id_brasserie
     } for beer in beers]
 
-    r.setex(cache_key, 3600, json.dumps(result))
+    r.setex(cache_key, 100000000, json.dumps(result))
     print("→ Données bières depuis MySQL")
     return jsonify(result)
 

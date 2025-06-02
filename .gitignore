@@ -1,0 +1,8 @@
+.package.json
+package-lock.json
+node_modules/
+dist/
+src/tsconfig.json
+src/tsconfig.node.json
+src/tsconfig.web.json
+src/tsconfig.test.json
