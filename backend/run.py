@@ -1,7 +1,14 @@
+import app
+
 from app import create_app
+<<<<<<< HEAD
 import redis 
 
+=======
+from flask_cors import CORS
+>>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
 app = create_app()
+CORS(app)
 
 # Connexion à Redis
 try:

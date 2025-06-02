@@ -12,6 +12,8 @@ import AddBeerForm from './components/AddBeerForm';
 import EditBeerForm from './components/EditBeerForm'
 import AddBreweryForm from "./components/AddBrewery";
 import EditBreweryForm from "./components/EditBreweryForm";
+import Maps from "./components/Maps/Maps"; // ajoute ce import en haut
+
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/Catalog' element={<Catalog />} />
               <Route path='/Brewery' element={<Brewery />} />
+              <Route path="/map" element={<Maps />} />
               <Route path='/Cart' element={<Cart />} />  {/* Ajout de la route pour le panier */}
               <Route path='/AdminPage' element={<AdminPage />} />
               <Route path="/admin/add-beer" element={<AddBeerForm />} />

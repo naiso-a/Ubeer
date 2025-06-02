@@ -11,8 +11,13 @@ def add_brasserie():
     Add a new brasserie to the database.
     """
     data = request.json
+<<<<<<< HEAD
 
     required_fields = ['name', 'description', 'image_url']
+=======
+    
+    required_fields = ['name', 'description', 'image_url','latitude','longitude']
+>>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}'}), 400
@@ -21,7 +26,11 @@ def add_brasserie():
         new_brasserie = Brasserie(
             name=data['name'],
             description=data['description'],
-            image_url=data['image_url']
+            image_url=data['image_url'],
+            latitude=data['latitude'],
+            longitude=data['longitude']
+
+
         )
         db.session.add(new_brasserie)
         db.session.commit()
@@ -30,7 +39,9 @@ def add_brasserie():
             'id': new_brasserie.id_brasserie,
             'name': new_brasserie.name,
             'description': new_brasserie.description,
-            'image_url': new_brasserie.image_url
+            'image_url': new_brasserie.image_url,
+            'latitude': new_brasserie.latitude,
+            'longitude': new_brasserie.longitude,
         }), 201
     except Exception as e:
         db.session.rollback()
@@ -54,14 +65,24 @@ def update_brasserie(brasserie_id):
         brasserie.description = data['description']
     if 'image_url' in data:
         brasserie.image_url = data['image_url']
+<<<<<<< HEAD
 
+=======
+    if 'latitude' in data:
+        brasserie.latitude = data['latitude']
+    if 'longitude' in data:
+        brasserie.longitude = data['longitude']
+    
+>>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     try:
         db.session.commit()
         return jsonify({
             'id': brasserie.id_brasserie,
             'name': brasserie.name,
             'description': brasserie.description,
-            'image_url': brasserie.image_url
+            'image_url': brasserie.image_url,
+            'latitude': brasserie.latitude,
+            'longitude': brasserie.longitude,
         }), 200
     except Exception as e:
         db.session.rollback()
@@ -93,12 +114,29 @@ def get_brasseries():
     Get all brasseries.
     """
     brasseries = Brasserie.query.all()
+<<<<<<< HEAD
     result = [{
         'id': brasserie.id_brasserie,
         'name': brasserie.name,
         'description': brasserie.description,
         'image_url': brasserie.image_url
     } for brasserie in brasseries]
+=======
+
+    # Créer une liste de dictionnaires avec les données des brasseries
+    result = []
+    for brasserie in brasseries:
+        result.append({
+            'id': brasserie.id_brasserie,
+            'name': brasserie.name,
+            'description': brasserie.description,
+            'image_url': brasserie.image_url,
+            'latitude': brasserie.latitude,
+            'longitude': brasserie.longitude,
+        })
+
+    # Retourner les données sous forme de JSON
+>>>>>>> 3e21aee3982861f65a531e4ff40008318434286d
     return jsonify(result)
 
 
