@@ -1,0 +1,21 @@
+.map-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.map-container {
+    width: 90%;
+    height: 500px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+.popup-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+}

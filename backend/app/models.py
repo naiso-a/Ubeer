@@ -11,6 +11,8 @@ class Brasserie(db.Model):
     name = db.Column(db.String(100), nullable=False)  # Exemple de champ "nom"
     description = db.Column(db.String(255))  # Exemple de champ "adresse"
     image_url = db.Column(db.String(100))  # Exemple de champ "ville"
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
 
     def __repr__(self):
         return f"<Brasserie {self.name}>"

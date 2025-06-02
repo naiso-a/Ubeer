@@ -7,16 +7,19 @@ const AddBreweryForm = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    
     const newBrewery = {
-      name, 
-      description, 
-      image_url: imageUrl, // Correspondance avec la base de données
+      name,
+      description,
+      image_url: imageUrl,
+      latitude: parseFloat(latitude),   // conversion en nombre
+      longitude: parseFloat(longitude), // conversion en nombre
     };
 
     try {
@@ -28,35 +31,54 @@ const AddBreweryForm = () => {
   };
 
   return (
-    <div>
-      <h2>Ajouter une brasserie</h2>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Nom de la Brasserie"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="URL de l'image"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
-          Ajouter la brasserie
-        </Button>
-      </form>
-    </div>
+      <div>
+        <h2>Ajouter une brasserie</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+              label="Nom de la Brasserie"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+              margin="normal"
+          />
+          <TextField
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              fullWidth
+              margin="normal"
+          />
+          <TextField
+              label="URL de l'image"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              fullWidth
+              margin="normal"
+          />
+          <TextField
+              label="Latitude"
+              value={latitude}
+              onChange={(e) => setLatitude(e.target.value)}
+              fullWidth
+              margin="normal"
+          />
+          <TextField
+              label="Longitude"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
+              fullWidth
+              margin="normal"
+          />
+          <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '20px' }}
+          >
+            Ajouter la brasserie
+          </Button>
+        </form>
+      </div>
   );
 };
 

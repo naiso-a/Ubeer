@@ -10,7 +10,7 @@ def add_brasserie():
     """
     data = request.json
     
-    required_fields = ['name', 'description', 'image_url']
+    required_fields = ['name', 'description', 'image_url','latitude','longitude']
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}'}), 400
@@ -19,7 +19,11 @@ def add_brasserie():
         new_brasserie = Brasserie(
             name=data['name'],
             description=data['description'],
-            image_url=data['image_url']
+            image_url=data['image_url'],
+            latitude=data['latitude'],
+            longitude=data['longitude']
+
+
         )
         db.session.add(new_brasserie)
         db.session.commit()
@@ -28,7 +32,9 @@ def add_brasserie():
             'id': new_brasserie.id_brasserie,
             'name': new_brasserie.name,
             'description': new_brasserie.description,
-            'image_url': new_brasserie.image_url
+            'image_url': new_brasserie.image_url,
+            'latitude': new_brasserie.latitude,
+            'longitude': new_brasserie.longitude,
         }), 201
     except Exception as e:
         db.session.rollback()
@@ -51,6 +57,10 @@ def update_brasserie(brasserie_id):
         brasserie.description = data['description']
     if 'image_url' in data:
         brasserie.image_url = data['image_url']
+    if 'latitude' in data:
+        brasserie.latitude = data['latitude']
+    if 'longitude' in data:
+        brasserie.longitude = data['longitude']
     
     try:
         db.session.commit()
@@ -58,7 +68,9 @@ def update_brasserie(brasserie_id):
             'id': brasserie.id_brasserie,
             'name': brasserie.name,
             'description': brasserie.description,
-            'image_url': brasserie.image_url
+            'image_url': brasserie.image_url,
+            'latitude': brasserie.latitude,
+            'longitude': brasserie.longitude,
         }), 200
     except Exception as e:
         db.session.rollback()
@@ -126,7 +138,9 @@ def get_brasseries():
             'id': brasserie.id_brasserie,
             'name': brasserie.name,
             'description': brasserie.description,
-            'image_url': brasserie.image_url
+            'image_url': brasserie.image_url,
+            'latitude': brasserie.latitude,
+            'longitude': brasserie.longitude,
         })
 
     # Retourner les données sous forme de JSON
