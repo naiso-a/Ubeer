@@ -16,7 +16,7 @@ def create_app():
 
     # Configuration de la base de données MySQL
     app.config['SQLALCHEMY_DATABASE_URI'] = (
-        'mysql+mysqlconnector://unlct7omaelffxqp:PPI2yf7xoWJNIOoQA1K3@'
+        'mysql+mysqlconnector://unlct7omaelffxqp:t85A4f3bCY3rsiC9VkGd@'
         'bbi9zrvl4akmfehwfapy-mysql.services.clever-cloud.com:3306/'
         'bbi9zrvl4akmfehwfapy'
     )

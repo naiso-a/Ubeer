@@ -1,10 +1,7 @@
-from app import create_app
-import redis 
+import redis
 
-app = create_app()
-
-# Connexion à Redis
 try:
+    # Connexion à Redis
     r = redis.Redis(host='localhost', port=6379, db=0)
 
     # Test simple
@@ -12,10 +9,6 @@ try:
     value = r.get("test_key")
 
     print("Valeur récupérée depuis Redis:", value.decode())
+
 except Exception as e:
     print("Erreur lors de la connexion à Redis :", e)
-# Test de la connexion à la base de données
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
