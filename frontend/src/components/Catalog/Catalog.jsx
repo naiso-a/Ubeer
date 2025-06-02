@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import '../../App.css';
 
+
 const Catalog = () => {
   const [beers, setBeers] = useState([]);
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
@@ -35,12 +36,12 @@ const Catalog = () => {
         {beers.map(beer => (
           <Grid item xs={12} sm={6} md={4} key={beer.id}>
             <Card>
-              <CardMedia
-                component="img"
-                height="140"
-                image={beer.image_url || 'https://via.placeholder.com/150?text=Biere'}
-                alt={beer.name}
-              />
+                <CardMedia
+                    component="img"
+                    className="beer-image"
+                    image={beer.image_url || 'https://via.placeholder.com/150?text=Biere'}
+                    alt={beer.name}
+                />
               <CardContent>
                 <Typography variant="h6">{beer.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
