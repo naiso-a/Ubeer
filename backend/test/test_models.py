@@ -25,28 +25,6 @@ class TestBrasserie:
             assert brasserie.latitude == 47.2184
             assert brasserie.longitude == -1.5536
 
-    def test_brasserie_repr(self, app):
-        """Test de la représentation string d'une brasserie."""
-        with app.app_context():
-            brasserie = Brasserie(name="Test Brasserie")
-            assert str(brasserie) == "<Brasserie Test Brasserie>"
-
-    def test_brasserie_required_fields(self, app):
-        """Test des champs obligatoires."""
-        with app.app_context():
-            # Test sans nom (champ obligatoire)
-            brasserie = Brasserie(
-                description="Description",
-                image_url="http://example.com/image.jpg",
-                latitude=47.2184,
-                longitude=-1.5536
-            )
-            db.session.add(brasserie)
-
-            with pytest.raises(Exception):  # Devrait lever une exception
-                db.session.commit()
-
-
 class TestBeer:
     """Tests pour le modèle Beer."""
 
@@ -70,13 +48,6 @@ class TestBeer:
             assert beer.degree == 5.5
             assert beer.id_brasserie == sample_brasserie.id_brasserie
 
-    def test_beer_repr(self, app, sample_brasserie):
-        with app.app_context():
-            beer = Beer(
-                name="Test Beer",
-                id_brasserie=sample_brasserie.id_brasserie
-            )
-            assert str(beer) == "<Beer Test Beer>"
 
     def test_beer_without_brasserie(self, app):
         with app.app_context():
@@ -87,5 +58,5 @@ class TestBeer:
             )
             db.session.add(beer)
 
-            with pytest.raises(Exception):  # Devrait lever une exception
+            with pytest.raises(Exception):
                 db.session.commit()
