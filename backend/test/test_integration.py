@@ -8,8 +8,6 @@ class TestBrasserieIntegration:
     """Tests d'intégration pour les brasseries."""
 
     def test_complete_brasserie_workflow(self, client, fake_redis):
-        """Test complet du workflow d'une brasserie : création, lecture, modification, suppression."""
-
         # 1. Créer une brasserie
         brasserie_data = {
             'name': 'Brasserie Intégration',
@@ -27,18 +25,18 @@ class TestBrasserieIntegration:
         created_brasserie = create_response.json
         brasserie_id = created_brasserie['id']
 
-        # 2. Vérifier la création en récupérant la brasserie
+
         get_response = client.get(f'/api/brasseries/{brasserie_id}')
         assert get_response.status_code == 200
         assert get_response.json['name'] == brasserie_data['name']
 
-        # 3. Vérifier qu'elle apparaît dans la liste
+
         list_response = client.get('/api/brasseries')
         assert list_response.status_code == 200
         assert len(list_response.json) == 1
         assert list_response.json[0]['name'] == brasserie_data['name']
 
-        # 4. Modifier la brasserie
+
         update_data = {
             'name': 'Brasserie Modifiée',
             'description': 'Description mise à jour'
@@ -51,20 +49,20 @@ class TestBrasserieIntegration:
         assert update_response.status_code == 200
         assert update_response.json['name'] == 'Brasserie Modifiée'
 
-        # 5. Vérifier la modification
+
         get_updated_response = client.get(f'/api/brasseries/{brasserie_id}')
         assert get_updated_response.status_code == 200
         assert get_updated_response.json['name'] == 'Brasserie Modifiée'
 
-        # 6. Supprimer la brasserie
+
         delete_response = client.delete(f'/api/brasseries/{brasserie_id}')
         assert delete_response.status_code == 200
 
-        # 7. Vérifier la suppression
+
         get_deleted_response = client.get(f'/api/brasseries/{brasserie_id}')
         assert get_deleted_response.status_code == 404
 
-        # 8. Vérifier qu'elle n'apparaît plus dans la liste
+
         final_list_response = client.get('/api/brasseries')
         assert final_list_response.status_code == 200
         assert len(final_list_response.json) == 0
@@ -86,20 +84,16 @@ class TestBrasserieIntegration:
                                       content_type='application/json')
         brasserie_id = create_response.json['id']
 
-        # Premier appel GET pour mettre en cache
         client.get('/api/brasseries')
         assert fake_redis.get('brasseries_all') is not None
 
-        # Modifier la brasserie (devrait invalider le cache)
         update_data = {'name': 'Cache Invalidé'}
         client.put(f'/api/brasseries/{brasserie_id}',
                    data=json.dumps(update_data),
                    content_type='application/json')
 
-        # Vérifier que le cache a été invalidé
         assert fake_redis.get('brasseries_all') is None
 
-        # Supprimer la brasserie (devrait aussi invalider le cache)
         client.get('/api/brasseries')  # Remettre en cache
         assert fake_redis.get('brasseries_all') is not None
 
@@ -132,18 +126,15 @@ class TestBeerIntegration:
         created_beer = create_response.json
         beer_id = created_beer['id']
 
-        # 2. Vérifier la création
         get_response = client.get(f'/api/beers/{beer_id}')
         assert get_response.status_code == 200
         assert get_response.json['name'] == beer_data['name']
         assert get_response.json['price'] == beer_data['price']
 
-        # 3. Vérifier dans la liste
         list_response = client.get('/api/beers')
         assert list_response.status_code == 200
         assert len(list_response.json) == 1
 
-        # 4. Modifier la bière
         update_data = {
             'name': 'Bière Modifiée',
             'price': 7.50
@@ -157,11 +148,9 @@ class TestBeerIntegration:
         assert update_response.json['name'] == 'Bière Modifiée'
         assert update_response.json['price'] == 7.50
 
-        # 5. Supprimer la bière
         delete_response = client.delete(f'/api/beers/{beer_id}')
         assert delete_response.status_code == 200
 
-        # 6. Vérifier la suppression
         get_deleted_response = client.get(f'/api/beers/{beer_id}')
         assert get_deleted_response.status_code == 404
 
@@ -210,7 +199,6 @@ class TestBeerIntegration:
             assert response.status_code == 201
             beer_ids.append(response.json['id'])
 
-        # 3. Vérifier que les bières sont bien liées à la brasserie
         beers_response = client.get('/api/beers')
         beers_list = beers_response.json
 
@@ -218,7 +206,6 @@ class TestBeerIntegration:
         for beer in beers_list:
             assert beer['id_brasserie'] == brasserie_id
 
-        # 4. Essayer de créer une bière avec une brasserie inexistante
         invalid_beer_data = {
             'name': 'Bière Invalide',
             'description': 'Bière avec brasserie inexistante',
@@ -232,7 +219,6 @@ class TestBeerIntegration:
                                        data=json.dumps(invalid_beer_data),
                                        content_type='application/json')
 
-        # Devrait échouer car la brasserie n'existe pas
         assert invalid_response.status_code == 400
 
 
@@ -243,7 +229,6 @@ class TestCacheIntegration:
     def test_cache_consistency_across_operations(self, client, fake_redis):
         """Test que le cache reste cohérent lors de multiples opérations."""
 
-        # 1. Créer plusieurs brasseries
         brasseries_data = [
             {
                 'name': f'Brasserie {i}',
@@ -262,21 +247,17 @@ class TestCacheIntegration:
                                    content_type='application/json')
             created_ids.append(response.json['id'])
 
-        # 2. Récupérer la liste (mise en cache)
         response1 = client.get('/api/brasseries')
         assert len(response1.json) == 3
 
-        # 3. Modifier une brasserie (invalidation cache)
         update_data = {'name': 'Brasserie Modifiée'}
         client.put(f'/api/brasseries/{created_ids[0]}',
                    data=json.dumps(update_data),
                    content_type='application/json')
 
-        # 4. Récupérer la liste à nouveau (depuis la DB)
         response2 = client.get('/api/brasseries')
         assert len(response2.json) == 3
 
-        # Vérifier que la modification est bien présente
         modified_brasserie = next(
             (b for b in response2.json if b['id'] == created_ids[0]),
             None
@@ -284,14 +265,11 @@ class TestCacheIntegration:
         assert modified_brasserie is not None
         assert modified_brasserie['name'] == 'Brasserie Modifiée'
 
-        # 5. Supprimer une brasserie (invalidation cache)
         client.delete(f'/api/brasseries/{created_ids[1]}')
 
-        # 6. Vérifier que la liste est mise à jour
         response3 = client.get('/api/brasseries')
         assert len(response3.json) == 2
 
-        # Vérifier que la brasserie supprimée n'est plus présente
         deleted_brasserie = next(
             (b for b in response3.json if b['id'] == created_ids[1]),
             None
@@ -321,17 +299,14 @@ class TestCacheIntegration:
                                    content_type='application/json')
             created_beer_ids.append(response.json['id'])
 
-        # Récupérer la liste (mise en cache)
         response1 = client.get('/api/beers')
         assert len(response1.json) == 2
 
-        # Modifier une bière
         update_data = {'price': 9.99}
         client.put(f'/api/beers/{created_beer_ids[0]}',
                    data=json.dumps(update_data),
                    content_type='application/json')
 
-        # Vérifier que la modification est reflétée
         response2 = client.get('/api/beers')
         modified_beer = next(
             (b for b in response2.json if b['id'] == created_beer_ids[0]),
@@ -376,27 +351,20 @@ class TestErrorHandlingIntegration:
                                     content_type='application/json')
         beer_id = beer_response.json['id']
 
-        # 3. Essayer de supprimer la brasserie (devrait échouer ou supprimer en cascade)
         delete_response = client.delete(f'/api/brasseries/{brasserie_id}')
 
-        # Selon votre configuration de contraintes, cela peut soit :
-        # - Échouer (contrainte de clé étrangère) - status 400
-        # - Réussir (suppression en cascade) - status 200
+
         assert delete_response.status_code in [200, 400]
 
         if delete_response.status_code == 200:
-            # Si suppression en cascade, vérifier que la bière est aussi supprimée
             beer_check = client.get(f'/api/beers/{beer_id}')
             assert beer_check.status_code == 404
         else:
-            # Si échec, vérifier que la brasserie existe toujours
             brasserie_check = client.get(f'/api/brasseries/{brasserie_id}')
             assert brasserie_check.status_code == 200
 
     def test_invalid_data_handling(self, client, fake_redis):
-        """Test de gestion des données invalides."""
 
-        # Test avec des données JSON malformées
         invalid_json = "{'invalid': json}"
         response = client.post('/api/brasseries',
                                data=invalid_json,
@@ -408,8 +376,8 @@ class TestErrorHandlingIntegration:
             'name': 'Test',
             'description': 'Test',
             'image_url': 'test.jpg',
-            'latitude': 'not_a_number',  # Devrait être un float
-            'longitude': 'not_a_number'  # Devrait être un float
+            'latitude': 'not_a_number',
+            'longitude': 'not_a_number'
         }
 
         response = client.post('/api/brasseries',

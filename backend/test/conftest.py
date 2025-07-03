@@ -10,18 +10,14 @@ from unittest.mock import patch
 
 @pytest.fixture
 def app():
-    """Crée une instance de l'application Flask pour les tests."""
-    # S'assurer que nous sommes en mode test
     os.environ['FLASK_ENV'] = 'testing'
 
     app = create_app()
 
-    # Configuration spécifique aux tests
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Contexte d'application pour les tests
     with app.app_context():
         db.create_all()
         yield app
@@ -42,7 +38,6 @@ def runner(app):
 @pytest.fixture
 def fake_redis():
     fake_redis_instance = fakeredis.FakeRedis()
-    # Correction du path du patch pour pointer vers le bon module
     with patch('app2.routes.r', fake_redis_instance):
         yield fake_redis_instance
 
@@ -59,7 +54,7 @@ def sample_brasserie(app):
         )
         db.session.add(brasserie)
         db.session.commit()
-        yield brasserie  # Utiliser yield au lieu de return pour les fixtures
+        yield brasserie
 
 
 @pytest.fixture
@@ -76,7 +71,7 @@ def sample_beer(app, sample_brasserie):
         )
         db.session.add(beer)
         db.session.commit()
-        yield beer  # Utiliser yield au lieu de return pour les fixtures
+        yield beer
 
 
 @pytest.fixture
@@ -120,8 +115,6 @@ def multiple_beers(app, sample_brasserie):
 
 @pytest.fixture(scope="session")
 def integration_test_database():
-    # Cette fixture peut être utilisée pour des tests d'intégration
-    # avec une vraie base de données si nécessaire
     pass
 
 
@@ -140,10 +133,8 @@ def pytest_configure(config):
 
 def pytest_collection_modifyitems(config, items):
     for item in items:
-        # Ajouter automatiquement le marker 'integration' aux tests dans test_integration.py
         if "test_integration" in item.nodeid:
             item.add_marker(pytest.mark.integration)
 
-        # Ajouter automatiquement le marker 'unit' aux autres tests
         elif "test_" in item.nodeid and "integration" not in item.nodeid:
             item.add_marker(pytest.mark.unit)
