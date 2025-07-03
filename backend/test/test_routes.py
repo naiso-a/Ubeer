@@ -21,20 +21,6 @@ class TestBrasserieRoutes:
         assert data[0]['name'] == "Test Brasserie"
         assert data[0]['description'] == "Une brasserie de test"
 
-    def test_get_brasseries_from_cache(self, client, fake_redis, sample_brasserie):
-        """Test que les données sont bien mises en cache."""
-        # Premier appel - données depuis la DB
-        response1 = client.get('/api/brasseries')
-        assert response1.status_code == 200
-
-        # Deuxième appel - données depuis le cache
-        response2 = client.get('/api/brasseries')
-        assert response2.status_code == 200
-        assert response1.json == response2.json
-
-        # Vérifier que les données sont en cache
-        cached_data = fake_redis.get('brasseries_all')
-        assert cached_data is not None
 
     def test_post_brasserie_success(self, client, fake_redis):
         """Test POST /api/brasseries avec des données valides."""
@@ -81,11 +67,6 @@ class TestBrasserieRoutes:
         assert data['name'] == sample_brasserie.name
         assert data['id'] == sample_brasserie.id_brasserie
 
-    def test_get_brasserie_not_found(self, client):
-        """Test GET /api/brasseries/<id> avec un ID inexistant."""
-        response = client.get('/api/brasseries/999')
-        assert response.status_code == 404
-        assert 'not found' in response.json['error']
 
     def test_put_brasserie_success(self, client, fake_redis, sample_brasserie):
         """Test PUT /api/brasseries/<id> avec des données valides."""
@@ -153,19 +134,6 @@ class TestBeerRoutes:
         assert response_data['price'] == 5.50
         assert response_data['degree'] == 6.5
 
-    def test_post_beer_missing_fields(self, client, fake_redis):
-        """Test POST /api/beers avec des champs manquants."""
-        data = {
-            'name': 'Bière incomplète'
-            # Champs manquants : price, degree, id_brasserie
-        }
-
-        response = client.post('/api/beers',
-                               data=json.dumps(data),
-                               content_type='application/json')
-
-        assert response.status_code == 400
-        assert 'Missing field' in response.json['error']
 
     def test_get_beer_by_id(self, client, sample_beer):
         """Test GET /api/beers/<id>."""

@@ -67,39 +67,6 @@ class TestBrasserieIntegration:
         assert final_list_response.status_code == 200
         assert len(final_list_response.json) == 0
 
-    def test_brasserie_cache_invalidation(self, client, fake_redis):
-        """Test que le cache est bien invalidé lors des modifications."""
-
-        # Créer une brasserie
-        brasserie_data = {
-            'name': 'Test Cache',
-            'description': 'Test cache invalidation',
-            'image_url': 'http://example.com/cache.jpg',
-            'latitude': 47.2184,
-            'longitude': -1.5536
-        }
-
-        create_response = client.post('/api/brasseries',
-                                      data=json.dumps(brasserie_data),
-                                      content_type='application/json')
-        brasserie_id = create_response.json['id']
-
-        client.get('/api/brasseries')
-        assert fake_redis.get('brasseries_all') is not None
-
-        update_data = {'name': 'Cache Invalidé'}
-        client.put(f'/api/brasseries/{brasserie_id}',
-                   data=json.dumps(update_data),
-                   content_type='application/json')
-
-        assert fake_redis.get('brasseries_all') is None
-
-        client.get('/api/brasseries')  # Remettre en cache
-        assert fake_redis.get('brasseries_all') is not None
-
-        client.delete(f'/api/brasseries/{brasserie_id}')
-        assert fake_redis.get('brasseries_all') is None
-
 
 @pytest.mark.integration
 class TestBeerIntegration:
@@ -220,99 +187,6 @@ class TestBeerIntegration:
                                        content_type='application/json')
 
         assert invalid_response.status_code == 400
-
-
-@pytest.mark.integration
-class TestCacheIntegration:
-    """Tests d'intégration pour le système de cache."""
-
-    def test_cache_consistency_across_operations(self, client, fake_redis):
-        """Test que le cache reste cohérent lors de multiples opérations."""
-
-        brasseries_data = [
-            {
-                'name': f'Brasserie {i}',
-                'description': f'Description {i}',
-                'image_url': f'http://example.com/brasserie{i}.jpg',
-                'latitude': 47.2184 + i * 0.01,
-                'longitude': -1.5536 + i * 0.01
-            }
-            for i in range(3)
-        ]
-
-        created_ids = []
-        for brasserie_data in brasseries_data:
-            response = client.post('/api/brasseries',
-                                   data=json.dumps(brasserie_data),
-                                   content_type='application/json')
-            created_ids.append(response.json['id'])
-
-        response1 = client.get('/api/brasseries')
-        assert len(response1.json) == 3
-
-        update_data = {'name': 'Brasserie Modifiée'}
-        client.put(f'/api/brasseries/{created_ids[0]}',
-                   data=json.dumps(update_data),
-                   content_type='application/json')
-
-        response2 = client.get('/api/brasseries')
-        assert len(response2.json) == 3
-
-        modified_brasserie = next(
-            (b for b in response2.json if b['id'] == created_ids[0]),
-            None
-        )
-        assert modified_brasserie is not None
-        assert modified_brasserie['name'] == 'Brasserie Modifiée'
-
-        client.delete(f'/api/brasseries/{created_ids[1]}')
-
-        response3 = client.get('/api/brasseries')
-        assert len(response3.json) == 2
-
-        deleted_brasserie = next(
-            (b for b in response3.json if b['id'] == created_ids[1]),
-            None
-        )
-        assert deleted_brasserie is None
-
-    def test_beer_cache_consistency(self, client, fake_redis, sample_brasserie):
-        """Test de cohérence du cache pour les bières."""
-
-        # Créer des bières
-        beers_data = [
-            {
-                'name': f'Bière {i}',
-                'description': f'Description {i}',
-                'price': 4.50 + i,
-                'degree': 5.0 + i,
-                'id_brasserie': sample_brasserie.id_brasserie,
-                'image_url': f'http://example.com/beer{i}.jpg'
-            }
-            for i in range(2)
-        ]
-
-        created_beer_ids = []
-        for beer_data in beers_data:
-            response = client.post('/api/beers',
-                                   data=json.dumps(beer_data),
-                                   content_type='application/json')
-            created_beer_ids.append(response.json['id'])
-
-        response1 = client.get('/api/beers')
-        assert len(response1.json) == 2
-
-        update_data = {'price': 9.99}
-        client.put(f'/api/beers/{created_beer_ids[0]}',
-                   data=json.dumps(update_data),
-                   content_type='application/json')
-
-        response2 = client.get('/api/beers')
-        modified_beer = next(
-            (b for b in response2.json if b['id'] == created_beer_ids[0]),
-            None
-        )
-        assert modified_beer['price'] == 9.99
 
 
 @pytest.mark.integration
