@@ -1,8 +1,8 @@
-import app
+import app2
 
-from app import create_app
+from app2 import create_app
 import redis
-from app.redis_client import redis_client
+from app2.redis_client import redis_client
 from flask_cors import CORS
 
 
@@ -13,14 +13,13 @@ CORS(app)
 # Connexion à Redis
 try:
     # Test simple
-    #redis_client.set("test_key", "Hello Redis!")
     redis_client.set('foo', 'bar')
-    print(redis_client.get('foo'))
+    value = redis_client.get('foo')  # Variable manquante ajoutée
+    print(f"Valeur récupérée: {value}")
 
     print("Valeur récupérée depuis Redis:", value.decode())
-except Exception as e:  
+except Exception as e:
     print("Erreur lors de la connexion à Redis :", e)
-# Test de la connexion à la base de données
 
 
 if __name__ == "__main__":
